@@ -13,9 +13,9 @@ module BestInPlace
                   else
                     BestInPlace::ViewHelpers.send(opts[:method], object.send(opts[:attr]))
                   end
-          {:display_as => value}.to_json
+          {:original_value => object.send(opts[:attr]), :display_as => value}.to_json
         when :proc
-          {:display_as => opts[:proc].call(object.send(opts[:attr]))}.to_json
+          {:original_value => object.send(opts[:attr]), :display_as => opts[:proc].call(object.send(opts[:attr]))}.to_json
         else
           {}.to_json
         end
