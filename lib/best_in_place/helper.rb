@@ -89,6 +89,12 @@ module BestInPlace
 
   private
     def build_value_for(object, field, opts)
+      klass = if object.respond_to?(:id)
+        "#{object.class}_#{object.id}"
+      else
+        object.class.to_s
+      end
+
       # register display methods first
       if opts[:display_as]
         BestInPlace::DisplayMethods.add_model_method(klass, field, opts[:display_as])
@@ -98,12 +104,6 @@ module BestInPlace
         BestInPlace::DisplayMethods.add_helper_method(klass, field, opts[:display_with], opts[:helper_options])
       end
       return "" if object.send(field).blank?
-
-      klass = if object.respond_to?(:id)
-        "#{object.class}_#{object.id}"
-      else
-        object.class.to_s
-      end
 
       if opts[:display_as]
         object.send(opts[:display_as]).to_s
